@@ -8,11 +8,14 @@ jobs:
           key: cloud-storage-dependency-cache-{{ checksum "pom.xml" }}
       - run:
           name: Build
-          command: mvn clean install -DskipTests=true
-
+          command: mvn scoverage:report
       - save_cache:
           key: cloud-storage-dependency-cache-{{ checksum "pom.xml" }}
           paths: ~/.m2
+      - run:
+          name: sonar
+          command: |
+            mvn -X sonar:sonar -Dsonar.projectKey=project-sunbird_sunbird-cloud-storage-sdk  -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=project-sunbird
 
 workflows:
   version: 2.1
